@@ -106,42 +106,5 @@ When the apply finishes, you will see useful outputs like:
 *   `public_dns`: The public DNS names.
 *   `vpc_subnets`: The subnets queried dynamically.
 
-If you paste one of the `public_ips` into your web browser, you will see the simple environment-aware text page confirming your deployment.
-
-## 10. Simple Viva Questions and Answers
-
-**Q1: What is Terraform?**
-A: It is an Infrastructure as Code (IaC) tool that allows us to provision and manage cloud infrastructure using human-readable configuration files.
-
-**Q2: Why did you choose Terraform for this project?**
-A: To easily manage multi-environment infrastructure (Dev and Prod) from a single reusable codebase in an automated, repeatable way.
-
-**Q3: What is a Terraform workspace?**
-A: Workspaces allow us to manage multiple separate deployments of the same Terraform code by keeping their state files completely isolated from each other.
-
-**Q4: Why are Dev and Prod using different workspaces?**
-A: So that changes to the Dev infrastructure don't accidentally modify or destroy the Prod infrastructure. They maintain separate Terraform states.
-
-**Q5: What is Terraform state?**
-A: It is a file (`terraform.tfstate`) that Terraform uses to track which real-world AWS resources correspond to the resources defined in the code.
-
-**Q6: What is a data block?**
-A: A data block is used to query and fetch information from AWS about existing resources, like finding the default VPC ID or the latest Linux AMI.
-
-**Q7: Why should AWS resource IDs not be hardcoded?**
-A: Hardcoding IDs (like AMI or VPC IDs) makes the code rigid. If an AMI is deprecated or if you move to a different AWS region/account, hardcoded IDs will break the code. Data blocks make it dynamic and region-agnostic.
-
-**Q8: Why do Dev and Prod have different tfvars?**
-A: Because they require different configurations. Dev needs fewer, cheaper resources (1 x t3.micro), while Prod needs more resources for real traffic (3 x t3.small).
-
-**Q9: What does terraform plan do?**
-A: It shows an execution plan, detailing exactly what resources Terraform will create, modify, or destroy, without actually making any changes to AWS yet.
-
-**Q10: Why does Prod have 3 instances distributed across Availability Zones?**
-A: For High Availability (HA) and fault tolerance. If one Availability Zone (data center) goes offline, the other instances in different AZs will keep the application running.
-
-**Q11: What is user_data and why are we using it?**
-A: It is a bootstrap script that runs when an EC2 instance boots. We use it to automatically install a web server and generate a simple webpage that proves the correct environment was provisioned.
-
-**Q12: What would happen if a developer changed the Dev infrastructure code (main.tf) to use an expensive instance type?**
+If you paste one of the `public_ips` into your web browser, you will see the simple environment-aware text page confirming your deployment.nfrastructure code (main.tf) to use an expensive instance type?**
 A: Because Dev and Prod share `main.tf`, if it was hardcoded, Prod would be affected too. However, since we use variables, the developer only changes the `terraform.tfvars.dev` file, safely keeping the Prod configuration intact.
